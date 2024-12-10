@@ -12,7 +12,6 @@ CURRENT_DIR = Path(__file__).parent
 NODE_CLASS_MAPPINGS = {}
 NODE_DISPLAY_NAME_MAPPINGS = {}
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -35,8 +34,8 @@ class CustomNodeMeta(type):
 
 
 class AestheticsPredictorV2_5Node(metaclass=CustomNodeMeta):
-    RETURN_TYPES: tuple[str] = ("STRING",)
-    RETURN_NAMES: tuple[str] = ("score",)
+    RETURN_TYPES: tuple[str] = ("FLOAT", "STRING",)
+    RETURN_NAMES: tuple[str] = ("score_number", "score_string",)
     FUNCTION: str = "predict"
     OUTPUT_NODE: bool = True
 
@@ -51,9 +50,9 @@ class AestheticsPredictorV2_5Node(metaclass=CustomNodeMeta):
             },
         }
 
-    def predict(self, image: torch.Tensor) -> tuple[str]:
+    def predict(self, image: torch.Tensor) -> tuple[float, str]:
         score = self.predictor(image)
-        return (str(score),)
+        return (score, str(score))
 
 
 class AestheticPredictorV2_5:
